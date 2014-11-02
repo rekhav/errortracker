@@ -9,7 +9,13 @@ angular.module('angularAppApp')
 	    for (var i = 0; i < $files.length; i++) {
 	      var file = $files[i];
 	      console.log(file.type);
-	      $scope.upload = $upload.upload({
+	      uploadFile(file);
+	      
+	    }
+	};
+
+	var uploadFile = function (file) {
+		$scope.upload = $upload.upload({
 	        url: 'api/uploadFile', //upload.php script, node.js route, or servlet url
 	        method: 'POST',
 	        headers: {'content-type': 'multipart/form-data'},
@@ -23,15 +29,10 @@ angular.module('angularAppApp')
 	        //formDataAppender: function(formData, key, val){}
 	      }).progress(function(evt) {
 	        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-	      }).success(function(data, status, headers, config) {
+	      }).success(function(data) {//, status, headers, config) {
 	        // file is uploaded successfully
 	        console.log(data);
 	      });
-	      //.error(...)
-	      //.then(success, error, progress); 
-	      // access or attach event listeners to the underlying XMLHttpRequest.
-	      //.xhr(function(xhr){xhr.upload.addEventListener(...)})
-	    }
-	}
+	};
     
   });
