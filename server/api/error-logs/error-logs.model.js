@@ -5,8 +5,8 @@ var mongoose = require('mongoose'),
 
 var ErrorLogsSchema = new Schema({
   name: String,
-  info: String,
   description: String,
+  stacktrace: String,
   status: String,
   buildVersion: String,
   buildRelease: String,

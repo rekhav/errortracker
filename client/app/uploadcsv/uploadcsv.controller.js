@@ -18,7 +18,7 @@ angular.module('angularAppApp')
 		$scope.upload = $upload.upload({
 	        url: 'api/uploadFile', //upload.php script, node.js route, or servlet url
 	        method: 'POST',
-	        headers: {'content-type': 'multipart/form-data'},
+	        headers: {'Content-Type': 'multipart/form-data'},
 	        //withCredentials: true,
 	        data: {myObj: $scope.myModelObj},
 	        file: file // or list of files ($files) for html5 only
