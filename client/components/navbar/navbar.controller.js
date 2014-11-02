@@ -5,6 +5,10 @@ angular.module('angularAppApp')
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
+    },
+    {
+      'title': 'Upload',
+      'link': '/uploadcsv'
     }];
 
     $scope.isCollapsed = true;

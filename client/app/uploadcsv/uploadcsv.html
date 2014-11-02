@@ -1,0 +1,27 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h2>Upload your csv file</h2>
+    <p class="lead">Upload your csv file here and you will see a list of UNIQUE errors below.</p>
+    <form class="row uploadcsv-form" enctype="multipart/form-data">
+    <label>Syncs in realtime across clients</label>
+    <p>
+      <div ng-file-select="onFileSelect($files)" data-multiple="true" title="select file" onclick="this.value = null" class="upload-button">
+      	Click here to select file
+      </div>      
+    </p>
+  </form>
+  <span>{{message}}</span>
+  </div>
+</header>
+
+
+<footer class="footer">
+  <div class="container">
+      <p>Angular Fullstack v2.0.13 |
+        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
+         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
+  </div>
+</footer>
+

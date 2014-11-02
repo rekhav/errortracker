@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('angularAppApp', [
+  'angularFileUpload',
   'ngCookies',
   'ngResource',
   'ngSanitize',
