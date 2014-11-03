@@ -3,9 +3,9 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var ErrorLogsSchema = new Schema({
+var ErrorLogSchema = new Schema({
   name: String,
-  description: String,
+  description: { type: String, unique: true },
   stacktrace: String,
   status: String,
   buildVersion: String,
@@ -14,4 +14,4 @@ var ErrorLogsSchema = new Schema({
   lastUpdated: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('ErrorLogs', ErrorLogsSchema);
+module.exports = mongoose.model('ErrorLog', ErrorLogSchema);

@@ -14,29 +14,16 @@ var _ = require('lodash'),
    Transform = require('stream').Transform,
    multiparty = require("multiparty"),
    csv = require('csv-streamify'),
-   JSONStream = require('JSONStream');
+   JSONStream = require('JSONStream'),
+   ErrorLog = require('../errorlog/errorlog.model');
 
-// Get list of things
-exports.uploadFile = function(req, res, next) {      
-   var form = new multiparty.Form();
-   // Parse req
-
-    form.parse(req, function(err, fields, files) {
-      Object.keys(fields).forEach(function(name) {
-        console.log('got field named ' + name);
-      });
-
-      Object.keys(files).forEach(function(name) {
-        console.log('got file named ' + name);
-      });
-
-    console.log('Upload completed!');
-    parserCsvFile(files, res);
-    
-  });
-    
-};
-
+var getCompleteStackTrace = function(data) {
+  //except for first and last record , add the rest with new line character which forms the complete stacktrace.
+  var stackTrace = data;
+  stackTrace.splice(0, 1);
+  stackTrace.splice(stackTrace.length-1, 1);  
+  return stackTrace.join('\n');
+}
 
 var parserCsvFile = function(files, res) {
       var dataFile = fs.createReadStream(files.file[0].path);
@@ -51,22 +38,38 @@ var parserCsvFile = function(files, res) {
         parser._rawHeader = [];
         parser._transform = function(data, encoding, done) {
         if (!this.header) {
-          console.log("inside header" + data[0]);
           this._rawHeader.push(data);
           if (data[0] === 'name') {
-            // We reached the last line of the header
+            // This is the header and ignore the original header
             this.header = ['name', 'description', 'stacktrace', 'status', 'buildVersion', 'buildRelease', 'rfcCreated'];            
-            this.push({header: this.header});
+            
           }
         }
         // After parsing the header, push data rows
         else {
+          console.log("data.length: " + data.length);
           if(data.length > 3) {
-            var stackTrace = getCompleteStackTrace(data); 
-            data[1] = data[1] + '\n' + data[2];            
-            data = [data[0], data[1], stackTrace , 'OPEN', '', '', false];               
+            var name = data[0],
+              description = data[1] + '\n' + data[2],
+              stackTrace = getCompleteStackTrace(data); 
+            data[0] = name;            
+            data[1] = description;     
+            data[2] =  stackTrace;
+                   
+          } else {
+            data[2] =  '';
           }
-          this.push({row: data});
+          var ErrorLog_data = {name: data[0], description: data[1], stacktrace: data[2], status: 'OPEN', buildVersion: '', buildRelease: '', rfcCreated: false};
+          var errorLog = new ErrorLog(ErrorLog_data);
+          errorLog.save( function(error, data){
+              if(error){
+                  console.log(error);
+              }
+              else{
+                  console.log("saved successfully");
+              }
+          });
+          this.push(ErrorLog_data);
         }
         done();
       };
@@ -81,10 +84,20 @@ var parserCsvFile = function(files, res) {
       .pipe(res);    
 }
 
-var getCompleteStackTrace = function(data) {
-  var stackTrace = '';
-  for(var i=1; i < data.length-1; i++) {
-      stackTrace = stackTrace + '\n' + data[i];
-  }
-  return stackTrace;
-}
+// upload the csv file
+exports.uploadFile = function(req, res, next) {      
+   var form = new multiparty.Form();
+   // Parse req
+
+    form.parse(req, function(err, fields, files) {
+      Object.keys(fields).forEach(function(name) {
+        });
+
+      Object.keys(files).forEach(function(name) {
+        });
+
+    parserCsvFile(files, res);
+    
+  });
+    
+};
