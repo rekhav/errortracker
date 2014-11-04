@@ -47,7 +47,6 @@ var parserCsvFile = function(files, res) {
         }
         // After parsing the header, push data rows
         else {
-          console.log("data.length: " + data.length);
           if(data.length > 3) {
             var name = data[0],
               description = data[1] + '\n' + data[2],
@@ -61,14 +60,21 @@ var parserCsvFile = function(files, res) {
           }
           var ErrorLog_data = {name: data[0], description: data[1], stacktrace: data[2], status: 'OPEN', buildVersion: '', buildRelease: '', rfcCreated: false};
           var errorLog = new ErrorLog(ErrorLog_data);
-          errorLog.save( function(error, data){
-              if(error){
-                  console.log(error);
-              }
-              else{
-                  console.log("saved successfully");
-              }
-          });
+          ErrorLog.findOne({'description': data[1]}, function (err, doc) {
+            if (err) { console.log("find error"); }
+            if(!doc) { 
+              ErrorLog.create(errorLog, function(err, newLog) {
+                if(err) { console.log("error adding new log"); }
+                console.log("new log added");
+              });
+            } else {
+              var now = new Date();
+              ErrorLog.update({id: doc.id}, {$set: {'lastUpdated'  : now},}, function(error) {
+                if(error) {console.log("update not successful" + error);}
+              });              
+            }              
+              
+          });          
           this.push(ErrorLog_data);
         }
         done();

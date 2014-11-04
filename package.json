@@ -72,6 +72,7 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-requirejs": "~0.2.1",
     "karma-script-launcher": "~0.1.0",
+    "mongoose-schema-extend": "^0.1.7",
     "multiparty": "4.0.0",
     "open": "~0.0.4",
     "requirejs": "~2.1.11",
