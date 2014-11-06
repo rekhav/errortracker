@@ -32,6 +32,6 @@ Thing.find({}).remove(function() {
   });
 });
 
-ErrorLog.find({}).remove(function(){
-  console.log("removing data");
-});
+// ErrorLog.find({}).remove(function(){
+//   console.log("removing data");
+// });

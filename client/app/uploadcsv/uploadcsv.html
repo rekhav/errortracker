@@ -17,16 +17,21 @@
 </header>
 <body>
   <div >
-    <table width=80%>
+    <table class="table table-striped table-bordered table-condensed table-hover">
       <thead>
         <tr>
           <th>Name</th>
           <th>Description</th>
           <!--<th>Stacktrace</th>-->
-          <th>Status</th>
-          <th>buildRelease</th>
-          <th>buildVersion</th>
-          <th>rfcCreated</th>
+          <th>
+            Status <br/>
+            <select ng-model="selectedStatus" ng-options="status for status in statuses" ng-change="filterStatus()">
+               <option value="">-- Select status --</option>
+            </select>
+          </th>
+          <th>Build Release</th>
+          <th>Build Version</th>
+          <th>Rfc Created</th>
           <th>Last Updated</th>
         </tr>
       </thead>

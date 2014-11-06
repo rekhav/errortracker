@@ -1,10 +1,10 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /things              ->  index
- * POST    /things              ->  create
- * GET     /things/:id          ->  show
- * PUT     /things/:id          ->  update
- * DELETE  /things/:id          ->  destroy
+ * GET     /errorLogs              ->  index
+ * POST    /errorLogs              ->  create
+ * GET     /errorLogs/:id          ->  show
+ * PUT     /errorLogs/:id          ->  update
+ * DELETE  /errorLogs/:id          ->  destroy
  */
 
 'use strict';
@@ -22,11 +22,26 @@ exports.index = function(req, res) {
 
 // Get a single errorLog
 exports.show = function(req, res) {
-  ErrorLog.findById(req.params.id, function (err, errorLog) {
-    if(err) { return handleError(res, err); }
-    if(!errorLog) { return res.send(404); }
-    return res.json(errorLog);
-  });
+  var query = req.params.id;
+  switch(query) {
+    case 'status':
+      ErrorLog.find({status : req.params.value}, function (err, errorLogs) {
+        if(err) { return handleError(res, err); }
+        if(!errorLogs) { return res.send(404); }
+        return res.json(errorLogs);
+      });
+      break;
+    case 'buildVersion':
+      ErrorLog.find({buildVersion : req.params.value}, function (err, errorLogs) {
+        if(err) { return handleError(res, err); }
+        if(!errorLogs) { return res.send(404); }
+        return res.json(errorLogs);
+      });
+      break;
+    default:
+      console.log("request is not valid");
+      break;
+  }  
 };
 
 // Creates a new errorLog in the DB.

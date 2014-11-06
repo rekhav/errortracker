@@ -2,7 +2,9 @@
 
 angular.module('angularAppApp')
   .controller('UploadcsvCtrl', function ($scope, $http, $upload) {
-    $scope.errorLogs = '';
+    $scope.errorLogs = [];
+
+    $scope.statuses = ['OPEN', 'ANALYSED', 'FIXED', 'CLOSED', 'IGNORED', 'DUPLICATE'];
 
     $http.get('/api/errorLogs').success(function(errorLogs) {
       $scope.errorLogs = errorLogs;
@@ -17,6 +19,16 @@ angular.module('angularAppApp')
 	      
 	    }
 	    
+	};
+
+	$scope.filterStatus = function() {
+		var selectedStatus = $scope.selectedStatus;
+		if(!_.isUndefined(selectedStatus) && selectedStatus) {
+			$http.get('/api/errorLogs/status/' + selectedStatus).success(function(errorLogs) {
+		      $scope.errorLogs = errorLogs;
+		      //socket.syncUpdates('thing', $scope.errorLogs);
+		    });
+		}
 	};
 
 	var uploadFile = function (file) {
