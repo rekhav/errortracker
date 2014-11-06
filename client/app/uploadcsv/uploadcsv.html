@@ -5,24 +5,24 @@
     <h2>Upload your csv file</h2>
     <p class="lead">Upload your csv file here and you will see a list of UNIQUE errors below.</p>
     <form class="row uploadcsv-form" enctype="multipart/form-data">
-    <label>Syncs in realtime across clients</label>
+    <!--     <label>Syncs in realtime across clients</label> -->
     <p>
-      <div ng-file-select="onFileSelect($files)" data-multiple="true" title="select file" onclick="this.value = null" class="upload-button">
-      	Click here to select file
-      </div>      
+      <button ng-file-select="onFileSelect($files)" data-multiple="true" title="select file" onclick="this.value = null" class="upload-button btn btn-default btn-lg">
+      	<span class="glyphicon glyphicon-upload glyphicon-upl"></span>Click here to select file
+      </button> 
     </p>
   </form>
   
   </div>
 </header>
-<body>
-  <div >
-    <table width=80%>
+<body>{{errorLog.stacktrace}}
+  <div>
+    <table class="table table-striped table-bordered table-condensed table-hover">
       <thead>
         <tr>
           <th>Name</th>
           <th>Description</th>
-          <!--<th>Stacktrace</th>-->
+          <th>Stacktrace</th>
           <th>Status</th>
           <th>buildRelease</th>
           <th>buildVersion</th>
@@ -34,7 +34,7 @@
         <tr ng-repeat="errorLog in errorLogs" ng-show="errorLog.name.length < 50">
           <td>{{errorLog.name}}</td>
           <td>{{errorLog.description}}</td>
-          <!--<td>{{errorLog.stacktrace}}</td>-->
+          <td><span class="btn btn-default btn-sm" ng-click="showStackTrace(errorLog)">Show stacktrace</span></td>
           <td>{{errorLog.status}}</td>
           <td>{{errorLog.buildRelease}}</td>
           <td>{{errorLog.buildVersion}}</td>

@@ -13,13 +13,36 @@
     letter-spacing: -1px;
 }
 
+.btn-default:hover, .btn-default:focus{
+    background-color: #fd6400;
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-default{
+    color: #fff;
+    background-color: #009;
+}
+
 .hero-unit {
     position: relative;
     padding: 30px 15px;
     color: #F5F5F5;
     text-align: center;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    background: #4393B9;
+
+    .glyphicon-upl{
+        margin-right: 20px;
+    }
+
+
+    h1, h2{
+        color: #fd6400;
+    }
+
+    .lead{
+        color: #fd6400;
+    }
 }
 
 .footer {
@@ -27,4 +50,41 @@
     padding: 30px 0;
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
+}
+
+.navbar{
+    background: #009;
+
+    .navbar-brand{
+        color: #fff;
+    }
+    .navbar-nav > li a{
+        color: #fff !important;
+    }
+
+    .navbar-nav > li a:hover{
+        background-color: #fd6400;
+        color: #fff !important;
+    }    
+
+    .navbar-nav > li.active a{
+        color: #fff;
+        background-color: #fd6400;
+    }
+
+    .navbar-nav > li.active a:hover{
+        color: #fff;
+        background-color: #fd6400;
+    }   
+
+}
+
+.stacktrace{
+    pre {
+        font-family: "Courier New" Courier monospace;
+    }
+}
+
+.modal-lg{
+    width: 1180px;
 }
