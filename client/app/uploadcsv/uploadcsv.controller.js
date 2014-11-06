@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularAppApp')
-  .controller('UploadcsvCtrl', function ($scope, $http, $upload) {
+  .controller('UploadcsvCtrl', function ($scope, $modal, $http, $upload) {
     $scope.errorLogs = [];
 
     $scope.statuses = ['OPEN', 'ANALYSED', 'FIXED', 'CLOSED', 'IGNORED', 'DUPLICATE'];
@@ -10,6 +10,23 @@ angular.module('angularAppApp')
       $scope.errorLogs = errorLogs;
       //socket.syncUpdates('thing', $scope.errorLogs);
     });
+
+	$scope.showStackTrace = function (item) {
+
+	var temp = item;
+
+    var modalInstance = $modal.open({
+      templateUrl: 'app/uploadcsv/stacktrace.html',
+      controller: 'ModalInstanceCtrl',
+      size: 'lg',
+      resolve: {
+      	items: function(){
+      		return item;
+      	}
+      }
+    });
+   
+  };
 
     $scope.onFileSelect = function($files) {
     //$files: an array of files selected, each file has name, size, and type.
@@ -48,4 +65,9 @@ angular.module('angularAppApp')
 	      });
 	};
     
-  });
+  })
+
+ .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.errorlog = items;
+});
