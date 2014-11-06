@@ -5,7 +5,9 @@
 
 'use strict';
 
-var Thing = require('../api/thing/thing.model');
+var Thing = require('../api/thing/thing.model'),
+    ErrorLog = require('../api/errorlog/errorlog.model');
+
 
 
 Thing.find({}).remove(function() {
@@ -28,4 +30,8 @@ Thing.find({}).remove(function() {
     name : 'Deployment Ready',
     info : 'Easily deploy your app to Heroku or Openshift with the heroku and openshift subgenerators'
   });
+});
+
+ErrorLog.find({}).remove(function(){
+  console.log("removing data");
 });

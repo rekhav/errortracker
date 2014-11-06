@@ -2,7 +2,12 @@
 
 angular.module('angularAppApp')
   .controller('UploadcsvCtrl', function ($scope, $http, $upload) {
-    $scope.message = '';
+    $scope.errorLogs = '';
+
+    $http.get('/api/errorLogs').success(function(errorLogs) {
+      $scope.errorLogs = errorLogs;
+      //socket.syncUpdates('thing', $scope.errorLogs);
+    });
 
     $scope.onFileSelect = function($files) {
     //$files: an array of files selected, each file has name, size, and type.
@@ -11,6 +16,7 @@ angular.module('angularAppApp')
 	      uploadFile(file);
 	      
 	    }
+	    
 	};
 
 	var uploadFile = function (file) {

@@ -12,10 +12,39 @@
       </div>      
     </p>
   </form>
-  <span>{{message}}</span>
+  
   </div>
 </header>
-
+<body>
+  <div >
+    <table width=80%>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <!--<th>Stacktrace</th>-->
+          <th>Status</th>
+          <th>buildRelease</th>
+          <th>buildVersion</th>
+          <th>rfcCreated</th>
+          <th>Last Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="errorLog in errorLogs" ng-show="errorLog.name.length < 50">
+          <td>{{errorLog.name}}</td>
+          <td>{{errorLog.description}}</td>
+          <!--<td>{{errorLog.stacktrace}}</td>-->
+          <td>{{errorLog.status}}</td>
+          <td>{{errorLog.buildRelease}}</td>
+          <td>{{errorLog.buildVersion}}</td>
+          <td>{{errorLog.rfcCreated}}</td>
+          <td>{{errorLog.lastUpdated}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
 
 <footer class="footer">
   <div class="container">

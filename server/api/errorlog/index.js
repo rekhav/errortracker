@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./error-logs.controller');
+var controller = require('./errorlog.controller');
 
 var router = express.Router();
 
