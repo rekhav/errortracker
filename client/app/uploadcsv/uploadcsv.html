@@ -22,9 +22,8 @@
         <tr>
           <th>Name</th>
           <th>Description</th>
-          <th>Stacktrace</th>
+          <!-- <th>Stacktrace</th> -->
           <th>
-            Status <br/>
             <select ng-model="selectedStatus" ng-options="status for status in statuses" ng-change="filterStatus()">
                <option value="">-- Select status --</option>
             </select>
@@ -38,8 +37,11 @@
       <tbody>
         <tr ng-repeat="errorLog in errorLogs" ng-show="errorLog.name.length < 50">
           <td>{{errorLog.name}}</td>
-          <td>{{errorLog.description}}</td>
-          <td><span class="btn btn-default btn-sm" ng-click="showStackTrace(errorLog)">Show stacktrace</span></td>
+          <td>
+            {{errorLog.description}} <br />
+            <div ng-show="errorLog.stacktrace != ''">more ... <span  class="btn btn-default btn-xs" ng-click="showStackTrace(errorLog)">Show</span></div>
+          </td>
+          <!--<td><span class="btn btn-default btn-sm" ng-click="showStackTrace(errorLog)">Show stacktrace</span></td>-->
           <td>{{errorLog.status}}</td>
           <td>{{errorLog.buildRelease}}</td>
           <td>{{errorLog.buildVersion}}</td>

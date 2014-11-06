@@ -19,10 +19,11 @@ var _ = require('lodash'),
 
 var getFormattedTrace = function(stackTrace) {
   var trace = '';
-  if(!_.isUndefined(stackTrace)) {
-    trace = stackTrace;
-    trace = stackTrace.replace(/\/r/g, "").replace(/\/t/g, "");
-    return trace;
+  if(!_.isUndefined(stackTrace) && stackTrace.indexOf('\\n\\t') > -1) {
+    trace = stackTrace;    
+    trace = stackTrace.replace(/\\n\\t/g, "\n");
+    trace = 'Stack trace: ' + trace;
+    return trace.length > 5000 ? trace.substring(0, 5000) : trace;
   }
   return '';
 };
@@ -32,32 +33,32 @@ var getCompleteStackTrace = function(data) {
   var stackTrace = data;
   stackTrace.splice(0, 1);
   stackTrace.splice(stackTrace.length-1, 1);  
-  return stackTrace.join('\n');
+  stackTrace = stackTrace.join(',');
+  return getFormattedTrace(stackTrace);  
 };
 
 var getDescription = function(fullStackTrace) {
   var stackTrace = fullStackTrace;
   if(_.isString(stackTrace)) {
-    var splittedArray = stackTrace.split('\\n\\t');
-    console.log(splittedArray[0]);
-    return splittedArray[0];
+    var splittedArray = stackTrace.split('\\n\\t'); 
+    var description =  splittedArray[0];
+    return description.length > 300 ? description.substring(0, 300) : description;
   }
   return '';
 };
 
-var storeErrorLogInDb = function (ErrorLog_data, data) {
+var storeErrorLogInDb = function (ErrorLog_data) {
   var errorLog = new ErrorLog(ErrorLog_data);
-    ErrorLog.findOne({'description': data[1]}, function (err, doc) {
+    ErrorLog.findOne({description: ErrorLog_data.description}, function (err, doc) {
       if (err) { console.log("find error"); }
-      if(!doc) { 
+      if(!doc) {
         ErrorLog.create(errorLog, function(err, newLog) {
-          if(err) { console.log("error adding new log"); }
-          console.log("new log added");
+          if(err) { console.log("error adding new log" + err); }          
         });
       } else {
         var now = new Date();
         ErrorLog.update({id: doc.id}, {$set: {'lastUpdated'  : now},}, function(error) {
-          if(error) {console.log("update not successful" + error);}
+          if(error) {console.log("update not successful");}
         });              
       }              
         
@@ -88,8 +89,7 @@ var parserCsvFile = function(files, res) {
         }
         // After parsing the header, push data rows
         else {
-         // if(data[2]) {
-            console.log("data[2] " + data[2]);            
+         if(_.isString(data[1]) && data[1] != '' && !_.isUndefined(data[2])) {
             if(data.length > 3) {
               var name = data[0],
                 description = getDescription(data[1]),
@@ -99,14 +99,14 @@ var parserCsvFile = function(files, res) {
               data[2] =  stackTrace;
                      
             } else {
-              data[2] =  getFormattedTrace(data[1]);
+              data[2] = getFormattedTrace(data[1]);
               data[1] = getDescription(data[1]);
               
             }         
             var ErrorLog_data = {name: data[0], description: data[1], stacktrace: data[2], status: 'OPEN', buildVersion: '', buildRelease: '', rfcCreated: false};
-             storeErrorLogInDb(ErrorLog_data, data);      
+            storeErrorLogInDb(ErrorLog_data);      
             this.push(ErrorLog_data);
-          //}
+          }
         }
         done();
       };
