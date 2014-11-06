@@ -1,7 +1,5 @@
 class,action,count
-nl.rabobank.gict.rob.util.ExceptionLogger,ServiceTimeOutException occured in ShareCompany:getGroupDetails,124
-nl.rabobank.gict.crmvirtual.framework.servlet.http.BufferedFrameworkResponse,"Request resulted in an exception response, clearing buffer.",64
-nl.rabobank.gict.rob.util.ExceptionLogger,"BackEnd Exception errorCode: 1, errorMessage: Instrument 38|NL0000390706 not found",63
-nl.rabobank.gict.rob.util.ExceptionLogger,"BackEnd Exception errorCode: 229999, errorMessage: Er is een technische fout opgetreden, probeert u het later nog eens. Voor ondersteuning bel 0900-0705.",37
-nl.rabobank.gict.rob.util.ExceptionLogger,"BackEnd Exception errorCode: 1, errorMessage: Instrument 361|GB00BQQFX454 not found",32
-freemarker.runtime,"freemarker.core.InvalidReferenceException: Expression employee_user is undefined on line 166, column 30 in menu.ftl.\n\tat freemarker.core.,34
+q,w,1
+w,e,2
+r,t,3
+t,y,5

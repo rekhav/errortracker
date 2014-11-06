@@ -113,12 +113,12 @@ var parserCsvFile = function(files, res) {
 
       var jsonToStrings = JSONStream.stringify(false);
       
-      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'text/plain');
       dataFile
       .pipe(csvToJson)
       .pipe(parser)
       .pipe(jsonToStrings)    
-      .pipe(res);    
+      .pipe(res);       
 };
 
 // upload the csv file

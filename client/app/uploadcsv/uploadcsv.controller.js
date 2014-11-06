@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('angularAppApp')
-  .controller('UploadcsvCtrl', function ($scope, $modal, $http, $upload) {
+  .controller('UploadcsvCtrl', function ($scope, $modal, $http, $upload, socket) {
     $scope.errorLogs = [];
 
     $scope.statuses = ['OPEN', 'ANALYSED', 'FIXED', 'CLOSED', 'IGNORED', 'DUPLICATE'];
 
     $http.get('/api/errorLogs').success(function(errorLogs) {
       $scope.errorLogs = errorLogs;
-      //socket.syncUpdates('thing', $scope.errorLogs);
+      socket.syncUpdates('errorLog', $scope.errorLogs);
     });
 
 	$scope.showStackTrace = function (item) {
@@ -35,7 +35,11 @@ angular.module('angularAppApp')
 	      uploadFile(file);
 	      
 	    }
-	    
+		$http.get('/api/errorLogs').success(function(errorLogs) {
+		      $scope.errorLogs = errorLogs;
+		      socket.syncUpdates('errorLog', $scope.errorLogs);
+		});
+
 	};
 
 	$scope.filterStatus = function() {
@@ -62,6 +66,8 @@ angular.module('angularAppApp')
 	      }).success(function(data) {//, status, headers, config) {
 	        // file is uploaded successfully
 	        console.log(data);
+
+
 	      });
 	};
     
