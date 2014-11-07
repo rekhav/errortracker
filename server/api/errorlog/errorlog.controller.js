@@ -32,10 +32,6 @@ exports.show = function(req, res) {
 
 // Updates an existing errorLog in the DB.
 exports.update = function(req, res) {
-  console.log("inside update" );
-  console.log(req.body.name.status);
-  console.log(req.body.name.buildRelease);
-  //if(req.body._id) { delete req.body._id; }
   ErrorLog.update({_id: req.body.name._id},
    {$set: 
     {

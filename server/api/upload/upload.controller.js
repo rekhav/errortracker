@@ -21,7 +21,7 @@ var getFormattedTrace = function(stackTrace) {
   var trace = '';
   if(!_.isUndefined(stackTrace) && stackTrace.indexOf('\\n\\t') > -1) {
     trace = stackTrace;    
-    trace = stackTrace.replace(/\\n\\t/g, "\n");
+    trace = stackTrace.replace(/\\t/g, '').replace(/\\n/g, '\n');
     trace = 'Stack trace: ' + trace;
     return trace.length > 5000 ? trace.substring(0, 5000) : trace;
   }
@@ -42,7 +42,8 @@ var getDescription = function(fullStackTrace) {
   if(_.isString(stackTrace)) {
     var splittedArray = stackTrace.split('\\n\\t'); 
     var description =  splittedArray[0];
-    return description.length > 300 ? description.substring(0, 300) : description;
+    description = description.length > 300 ? description.substring(0, 300) : description;
+    return description.replace(/\\t/g, '').replace(/\\n/g, '');
   }
   return '';
 };
@@ -110,10 +111,9 @@ var parserCsvFile = function(files, res) {
             storeErrorLogInDb(ErrorLog_data);      
             this.push(ErrorLog_data);
             this._rawRows.push(ErrorLog_data);
-            //this._row = this._rawRows;
+            
           }
         }
-        console.log("done" + this._rawRows);
         done();
       };
 
@@ -124,23 +124,16 @@ var parserCsvFile = function(files, res) {
       .pipe(csvToJson)
       .pipe(parser)
       .pipe(jsonToStrings)    
-      .pipe(res);       
+      .pipe(res);
+      res.write("passed successfully");      
 };
 
 // upload the csv file
 exports.uploadFile = function(req, res, next) {      
    var form = new multiparty.Form();
    // Parse req
-
-    form.parse(req, function(err, fields, files) {
-      Object.keys(fields).forEach(function(name) {
-        });
-
-      Object.keys(files).forEach(function(name) {
-        });
-
-    parserCsvFile(files, res);
+    form.parse(req, function(err, fields, files) {      
+      parserCsvFile(files, res);
     
-  });
-    
+    });    
 };
