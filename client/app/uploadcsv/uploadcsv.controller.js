@@ -48,20 +48,23 @@ angular.module('angularAppApp')
 			default:
 				console.log('not recognized fieldID so updating nothing' + fieldId);
 				break;
-		}
-		
+		}		
 		$http.post('/api/errorLogs', { name: errorLog });
 	      console.log("updated successfully");	
 		}
 	    
 	};
 
+	$scope.showReleases = function(modifiedStatus) {
+	 	return modifiedStatus === 'FIXED';
+	};
+
 	$scope.showInputs = function(modifiedStatus) {
 	 	return modifiedStatus === 'FIXED';
 	};
 
-	$scope.showSystem = function(modifiedStatus) {
-	 	return modifiedStatus === 'ANALYSED';
+	$scope.showSystems = function(modifiedStatus) {
+		return modifiedStatus === 'ANALYSED';
 	};
 
 	$scope.showStackTrace = function (item) {

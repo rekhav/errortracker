@@ -50,8 +50,7 @@ var getDescription = function(fullStackTrace) {
 
 var storeErrorLogInDb = function (ErrorLog_data) {
   var errorLog = new ErrorLog(ErrorLog_data);
-  console.log("ErrorLog_data.description: " + ErrorLog_data.description);
-    ErrorLog.findOne({description: ErrorLog_data.description}, function (err, doc) {
+  ErrorLog.findOne({description: ErrorLog_data.description}, function (err, doc) {
       if (err) { console.log("find error"); }
       if(!doc) {
         ErrorLog.create(errorLog, function(err, newLog) {
