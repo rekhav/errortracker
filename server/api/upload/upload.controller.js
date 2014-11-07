@@ -49,16 +49,19 @@ var getDescription = function(fullStackTrace) {
 
 var storeErrorLogInDb = function (ErrorLog_data) {
   var errorLog = new ErrorLog(ErrorLog_data);
+  console.log("ErrorLog_data.description: " + ErrorLog_data.description);
     ErrorLog.findOne({description: ErrorLog_data.description}, function (err, doc) {
       if (err) { console.log("find error"); }
       if(!doc) {
         ErrorLog.create(errorLog, function(err, newLog) {
-          if(err) { console.log("error adding new log" + err); }          
+          if(err) { console.log("error adding new log" + err); } 
+          console.log("log not found so adding a new one");         
         });
       } else {
         var now = new Date();
         ErrorLog.update({id: doc.id}, {$set: {'lastUpdated'  : now},}, function(error) {
           if(error) {console.log("update not successful");}
+          console.log("log found so updating an existing one");       
         });              
       }              
         
@@ -77,10 +80,11 @@ var parserCsvFile = function(files, res) {
 
       var parser = new Transform(options);
         parser.header = null;
-        parser._rawHeader = [];
+        parser._rawRows = [];
+        parser.row = null;
         parser._transform = function(data, encoding, done) {
         if (!this.header) {
-          this._rawHeader.push(data);
+          //this._rawHeader.push(data);
           if (data[0] === 'class') {
             // This is the header and ignore the original header
             this.header = ['name', 'description', 'stacktrace', 'status', 'buildVersion', 'buildRelease', 'rfcCreated'];            
@@ -89,25 +93,27 @@ var parserCsvFile = function(files, res) {
         }
         // After parsing the header, push data rows
         else {
-         if(_.isString(data[1]) && data[1] != '' && !_.isUndefined(data[2])) {
+         if(_.isString(data[1]) && data[1] !== '' && !_.isUndefined(data[2])) {
             if(data.length > 3) {
-              var name = data[0],
-                description = getDescription(data[1]),
-                stackTrace = getCompleteStackTrace(data); 
-              data[0] = name;            
+              var description = getDescription(data[1]),
+                  stackTrace = getCompleteStackTrace(data);
+              data[2] = data[data.length-1]; 
               data[1] = description;     
-              data[2] =  stackTrace;
+              data[3] =  stackTrace;
                      
             } else {
-              data[2] = getFormattedTrace(data[1]);
+              data[3] = getFormattedTrace(data[1]);
               data[1] = getDescription(data[1]);
               
             }         
-            var ErrorLog_data = {name: data[0], description: data[1], stacktrace: data[2], status: 'OPEN', buildVersion: '', buildRelease: '', rfcCreated: false};
+            var ErrorLog_data = {description: data[1], stacktrace: data[3], count: data[2], status: 'NEW', remark: '',system: '', buildVersion: '', buildRelease: '', rfcCreated: false};
             storeErrorLogInDb(ErrorLog_data);      
             this.push(ErrorLog_data);
+            this._rawRows.push(ErrorLog_data);
+            //this._row = this._rawRows;
           }
         }
+        console.log("done" + this._rawRows);
         done();
       };
 
