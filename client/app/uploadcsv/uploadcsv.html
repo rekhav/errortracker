@@ -17,30 +17,30 @@
 </header>
 <body>
   <div>
-    <table class="table table-striped table-bordered table-condensed table-hover">
+    <table class="table table-striped table-bordered table-condensed table-hover errorLogs">
       <thead>
         <tr>
-          <th>S.No</th>
-          <th>Description</th>
+          <th class="sno">S.No</th>
+          <th class="description">Description</th>
           <!-- <th>Stacktrace</th> -->
-          <th>
+          <th class="filterstatus">
             <select ng-model="selectedStatus" ng-options="status for status in statuses" ng-change="filterColumn(selectedStatus, selectedSystem, selectedRelease)">
                <option value="">-- Select status --</option>
             </select>
           </th>
-          <th>Count</th>
-          <th>
+          <th class="count">Count</th>
+          <th class="filtersystem">
             <select ng-model="selectedSystem" ng-options="system for system in systems" ng-change="filterColumn(selectedStatus, selectedSystem, selectedRelease)">
                <option value="">-To be fixed in-</option>
             </select>
           </th>
-          <th>
+          <th class="filterrelease">
             <select ng-model="selectedRelease" ng-options="release for release in releases" ng-change="filterColumn(selectedStatus, selectedSystem, selectedRelease)">
                <option value="">-- Select release --</option>
             </select>
           </th>
-          <th>Build Version</th>          
-          <th>Last Updated</th>
+          <th class="buildversion">Build Version</th>          
+          <th class="lastupdated">Last Updated</th>
         </tr>
       </thead>
       <tbody>

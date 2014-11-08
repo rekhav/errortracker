@@ -1,3 +1,32 @@
 .uploadcsv-form {
     margin: 20px 0;
 }
+
+.table.errorLogs {
+	th.sno {
+		width : 3%;
+	}
+
+	th.description {
+		width : 66%;
+	}
+
+	th.filterstatus {
+		width : 5%;
+	}
+	th.filtersystem {
+		width : 5%;
+	}
+	th.count {
+		width : 3%;
+	}
+	th.filterrelease {
+		width : 5%;
+	}
+	th.buildversion {
+		width : 5%;
+	}
+	th.lastupdated {
+		width : 10%;
+	}
+}
