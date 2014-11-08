@@ -5,7 +5,7 @@ angular.module('angularAppApp')
     $scope.filterdLogs = [];
 
     $scope.statuses = ['NEW', 'OPEN', 'ANALYSED', 'FIXED', 'RESOLVED', 'CLOSED', 'IGNORED', 'DUPLICATE'];
-    $scope.systems = ['ROB', 'PIF', 'Prisma', 'BaNCS', 'eXimius', 'SIEBEL', 'RT', 'RASS'];
+    $scope.systems = ['ROB', 'PIF', 'Prisma', 'BaNCS', 'eXimius', 'SIEBEL', 'RT', 'RASS', 'ShareCompany', 'PrintNet'];
     $scope.releases = ['Q4-2014', 'Q4.1-2014', 'Q1-2015', 'Q2-2015', 'Q3-2015', 'Q4-2015'];
     
     var getAllErrorLogs = function () {
