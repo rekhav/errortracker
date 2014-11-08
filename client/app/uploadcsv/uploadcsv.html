@@ -25,18 +25,18 @@
           <!-- <th>Stacktrace</th> -->
           <th class="filterstatus">
             <select ng-model="selectedStatus" ng-options="status for status in statuses" ng-change="filterColumn(selectedStatus, selectedSystem, selectedRelease)">
-               <option value="">-- Select status --</option>
+               <option value="">Select status</option>
             </select>
           </th>
           <th class="count">Count</th>
           <th class="filtersystem">
             <select ng-model="selectedSystem" ng-options="system for system in systems" ng-change="filterColumn(selectedStatus, selectedSystem, selectedRelease)">
-               <option value="">-To be fixed in-</option>
+               <option value="">To be fixed in</option>
             </select>
           </th>
           <th class="filterrelease">
             <select ng-model="selectedRelease" ng-options="release for release in releases" ng-change="filterColumn(selectedStatus, selectedSystem, selectedRelease)">
-               <option value="">-- Select release --</option>
+               <option value="">Select release</option>
             </select>
           </th>
           <th class="buildversion">Build Version</th>          
