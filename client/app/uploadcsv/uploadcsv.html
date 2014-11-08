@@ -20,7 +20,7 @@
     <table class="table table-striped table-bordered table-condensed table-hover errorLogs">
       <thead>
         <tr>
-          <th class="sno">S.No</th>
+          <th class="sno">#</th>
           <th class="description">Description</th>
           <!-- <th>Stacktrace</th> -->
           <th class="filterstatus">
@@ -63,26 +63,24 @@
           </td>
           <td>{{errorLog.count}}</td>
           <td>
-            <span ng-hide="showSystem">
-              <select ng-show="showSystems(modifiedStatus)" ng-model="updatedSystem" ng-options="system for system in systems" ng-change="showSystem = true;updateLog(errorLog, 'system', updatedSystem)" ng-init="showSystem = false">
-                 <option ng-selected="{{errorLog.system == system}}" value="system">system</option>
+            <span ng-hide="showSystem" ng-blur="showSystem=false">
+              <select ng-show="showSystems(modifiedStatus)" ng-model="updatedSystem" ng-options="system for system in systems" ng-change="showSystem = true;updateLog(errorLog, 'system', updatedSystem)" ng-init="updatedSystem = errorLog.system">                 
               </select>
             </span> 
-            <div ng-show="showSystem">{{errorLog.system}}</div>
+            {{errorLog.system}}
           </td>
           <td>
-            <span ng-hide="showRelease">
-              <select ng-show="showReleases(modifiedStatus)" ng-model="updatedRelease" ng-options="release for release in releases" ng-change="showRelease = true;updateLog(errorLog, 'buildRelease', updatedRelease)" ng-init="showRelease = false">
-                <option value="">-- Select release --</option>
+            <span ng-hide="showRelease" ng-blur="showRelease=false">
+              <select ng-show ="showReleases(modifiedStatus)" ng-model="updatedRelease" ng-options="release for release in releases" ng-change="showRelease = true;updateLog(errorLog, 'buildRelease', updatedRelease)" ng-init="updatedRelease = errorLog.buildRelease">                
               </select>
             </span>           
-            <div ng-show="showRelease">{{errorLog.buildRelease}}</div>
+            {{errorLog.buildRelease}}
           </td>
           <td>
             <span ng-hide="showVersion">
                <input type="text" ng-show="showInputs(modifiedStatus)" ng-model="buildVersion" ng-blur="showVersion = true;updateLog(errorLog, 'buildVersion', buildVersion)" ng-init="showVersion = false"/>
             </span>
-            <div ng-show="showVersion">{{errorLog.buildVersion}}</div>
+            {{errorLog.buildVersion}}
           </td>          
           <td>{{errorLog.lastUpdated | date : 'mediumDate'}}</td>
         </tr>

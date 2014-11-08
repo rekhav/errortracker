@@ -3,6 +3,10 @@
 }
 
 .table.errorLogs {
+	th {
+		background-color:darkgrey;
+		color:inherit;
+	}
 	th.sno {
 		width : 3%;
 	}
