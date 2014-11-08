@@ -35,12 +35,12 @@ exports.update = function(req, res) {
   ErrorLog.update({_id: req.body.name._id},
    {$set: 
     {
-      'lastUpdated'  : new Date(),
+      'lastUpdated' : new Date(),
       'status' : req.body.name.status,
-      'buildRelease': req.body.name.buildRelease,
-      'buildVersion': req.body.name.buildVersion,
-      'system': req.body.name.system,
-      'remark': req.body.name.remark
+      'buildRelease' : req.body.name.buildRelease,
+      'buildVersion' : req.body.name.buildVersion,
+      'system' : req.body.name.system,
+      'remark' : req.body.name.remark
       },
     }, function(error) {
         if(error) {return handleError(res, error);}
