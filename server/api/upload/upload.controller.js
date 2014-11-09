@@ -1,10 +1,6 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /things              ->  index
- * POST    /things              ->  create
- * GET     /things/:id          ->  show
- * PUT     /things/:id          ->  update
- * DELETE  /things/:id          ->  destroy
+ * POST    /uploadcsv              ->  upload 
  */
 
 'use strict';
@@ -42,8 +38,10 @@ var getDescription = function(fullStackTrace) {
   if(_.isString(stackTrace)) {
     var splittedArray = stackTrace.split('\\n\\t'); 
     var description =  splittedArray[0];
-    description = description.length > 300 ? description.substring(0, 300) : description;
-    return description.replace(/\\t/g, '').replace(/\\n/g, '');
+    if(description.length > 1000) {
+        description = description.substring(0, 100) + '... ' + description.substring(description.length-600);
+    }    
+    return description.replace(/\\t/g, '').replace(/\\n/g, '').replace(/"/g, '');
   }
   return '';
 };
@@ -60,7 +58,7 @@ var storeErrorLogInDb = function (ErrorLog_data) {
       } else {
         var now = new Date();
         ErrorLog.update({_id: doc._id}, {$set: {'lastUpdated' : now, 'count' : ErrorLog_data.count},}, function(error) {
-          if(error) {console.log("update not successful");}
+          if(error) {console.log("update not successful ");}
           console.log("log found so updating an existing one");       
         });              
       }              
@@ -80,8 +78,7 @@ var parserCsvFile = function(files, res) {
 
       var parser = new Transform(options);
         parser.header = null;
-        parser._rawRows = [];
-        parser.row = null;
+        parser.row = [];
         parser._transform = function(data, encoding, done) {
         if (!this.header) {
           //this._rawHeader.push(data);
@@ -105,14 +102,12 @@ var parserCsvFile = function(files, res) {
               data[3] = getFormattedTrace(data[1]);
               data[1] = getDescription(data[1]);
               
-            }            
+            }  
             var count = data[2].replace(/\\r/g, ''); 
-            console.log(count);        
             var ErrorLog_data = {description: data[1], stacktrace: data[3], count: count, status: 'NEW', remark: '',system: '', buildVersion: '', buildRelease: ''};
             storeErrorLogInDb(ErrorLog_data);      
             this.push(ErrorLog_data);
-            this._rawRows.push(ErrorLog_data);
-            
+            this.row.push(ErrorLog_data);            
           }
         }
         done();

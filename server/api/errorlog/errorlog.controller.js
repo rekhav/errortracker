@@ -20,13 +20,36 @@ exports.index = function(req, res) {
   });
 };
 
-// Get a single errorLog
+// Get logs with selected filter
 exports.show = function(req, res) {
-    ErrorLog.find({status : req.params.value}, function (err, errorLogs) {
-        if(err) { return handleError(res, err); }
-        if(!errorLogs) { return res.send(404); }
-        return res.json(errorLogs);
-    });     
+    var field = req.params.id;
+    switch (field) {
+      case 'status' : 
+        ErrorLog.find({status : req.params.value}, function (err, errorLogs) {
+          if(err) { return handleError(res, err); }
+          if(!errorLogs) { return res.send(404); }
+          return res.json(errorLogs);
+        });
+        break;
+      case 'buildRelease' :
+        ErrorLog.find({buildRelease : req.params.value}, function (err, errorLogs) {
+          if(err) { return handleError(res, err); }
+          if(!errorLogs) { return res.send(404); }
+          return res.json(errorLogs);
+        });
+        break;
+      case 'system' :
+        ErrorLog.find({system : req.params.value}, function (err, errorLogs) {
+          if(err) { return handleError(res, err); }
+          if(!errorLogs) { return res.send(404); }
+          return res.json(errorLogs);
+        });
+        break;
+      default :
+        console.log('No filter requested so sending nothing');
+        return res.json(null);
+        break;
+    }      
   
 };
 

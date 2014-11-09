@@ -15,17 +15,27 @@ angular.module('angularAppApp')
 		});
   	};
 
-  	var filterOtherColumnsIfNeeded = function (selectedSystem, selectedRelease) {
-  		if(!_.isUndefined(selectedSystem) && selectedSystem) {
-		 		$scope.filterdLogs = _.filter($scope.filterdLogs, function (errorLog) { return errorLog.system === selectedSystem; });		 			
- 		}
- 		if(!_.isUndefined(selectedRelease) && selectedRelease) {
+  	var getNewErrorLogs = function () {
+  		$http.get('/api/errorLogs/status/NEW').success(function(errorLogs) {
+		      $scope.errorLogs = errorLogs;
+		      socket.syncUpdates('errorLog', $scope.errorLogs);
+		});
+  	};
+
+  	var filterLogsBasedOnRelease = function (selectedRelease) {
+  		if(!_.isUndefined(selectedRelease) && selectedRelease) {
  			$scope.filterdLogs = _.filter($scope.filterdLogs, function (errorLog) { return errorLog.buildRelease === selectedRelease; });
- 		}		 	
-	 	$scope.errorLogs = $scope.filterdLogs;
+ 		}	 	
 	 };
 
-    getAllErrorLogs();
+	 var filterLogsBasedOnSystem = function (selectedSystem) {
+  		if(!_.isUndefined(selectedSystem) && selectedSystem) {
+		 	$scope.filterdLogs = _.filter($scope.filterdLogs, function (errorLog) { return errorLog.system === selectedSystem; });		 			
+ 		}
+ 	
+	 };
+
+    getNewErrorLogs();
 
 	$scope.updateLog = function(errorLog, fieldId, fieldValue) {
 		if(fieldValue) {
@@ -50,7 +60,7 @@ angular.module('angularAppApp')
 				break;
 		}		
 		$http.post('/api/errorLogs', { name: errorLog });
-	      console.log("updated successfully");	
+	      console.log('updated successfully');	
 		}
 	    
 	};
@@ -69,7 +79,7 @@ angular.module('angularAppApp')
 
 	$scope.showStackTrace = function (item) {
 
-		var modalInstance = $modal.open({
+		$modal.open({
 	      templateUrl: 'app/uploadcsv/stacktrace.html',
 	      controller: 'ModalInstanceCtrl',
 	      size: 'lg',
@@ -95,15 +105,25 @@ angular.module('angularAppApp')
 		if(!_.isUndefined(selectedStatus) && selectedStatus) {
 			$http.get('/api/errorLogs/status/' + selectedStatus).success(function(errorLogs) {
 		      $scope.filterdLogs = errorLogs;
-		      filterOtherColumnsIfNeeded(selectedSystem, selectedRelease);		      
+		      filterLogsBasedOnSystem(selectedSystem);
+		      filterLogsBasedOnRelease(selectedRelease);
+		      $scope.errorLogs = $scope.filterdLogs;      
+		    });
+		} else if(!_.isUndefined(selectedSystem) && selectedSystem) {
+			$http.get('/api/errorLogs/system/' + selectedSystem).success(function(errorLogs) {
+		      $scope.filterdLogs = errorLogs;
+		      filterLogsBasedOnRelease(selectedRelease);
+		      $scope.errorLogs = $scope.filterdLogs;	      
+		    });
+		} else if(!_.isUndefined(selectedRelease) && selectedRelease) {
+			$http.get('/api/errorLogs/buildRelease/' + selectedRelease).success(function(errorLogs) {
+		      $scope.errorLogs = errorLogs;	 
 		    });
 		} else {
-			$http.get('/api/errorLogs').success(function(errorLogs) {
-		    	$scope.filterdLogs = errorLogs;
-		    	filterOtherColumnsIfNeeded(selectedSystem, selectedRelease);
+			$http.get('/api/errorLogs/').success(function(errorLogs) {
+		    	$scope.errorLogs = errorLogs;	 
 		    });
-		}	
-					
+		}					
 		
 	};
 
@@ -118,10 +138,10 @@ angular.module('angularAppApp')
 	        file: file 
 	      }).progress(function(evt) {
 	        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-	      }).success(function(data) {//, status, headers, config) {
+	      }).success(function() {//, status, headers, config) {
 	        // file is uploaded successfully
 	        console.log('uploaded successfully');
-	        getAllErrorLogs();
+	        getNewErrorLogs();
 	      });
 	};
     

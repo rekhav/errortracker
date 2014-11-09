@@ -4,6 +4,7 @@ describe('Controller: UploadcsvCtrl', function () {
 
   // load the controller's module
   beforeEach(module('angularAppApp'));
+  beforeEach(module('socketMock'));
 
   var UploadcsvCtrl, scope;
 
