@@ -66,11 +66,11 @@ angular.module('angularAppApp')
 	};
 
 	$scope.showReleases = function(modifiedStatus) {
-	 	return modifiedStatus === 'FIXED';
+		return modifiedStatus === 'FIXED';
 	};
 
 	$scope.showInputs = function(modifiedStatus) {
-	 	return modifiedStatus === 'FIXED';
+		return modifiedStatus === 'FIXED';
 	};
 
 	$scope.showSystems = function(modifiedStatus) {
