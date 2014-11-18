@@ -41,6 +41,7 @@
           </th>
           <th class="buildversion">Build Version</th>          
           <th class="lastupdated">Last Updated</th>
+          <th class="delete"></th>
         </tr>
       </thead>
       <tbody>
@@ -83,6 +84,11 @@
             {{errorLog.buildVersion}}
           </td>          
           <td>{{errorLog.lastUpdated | date : 'mediumDate'}}</td>
+          <td>
+            <a ng-click="deleteLog(errorLog)" title="Delete log" role="button" href="">
+              <span class="glyphicon glyphicon-remove" ></span>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>

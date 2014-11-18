@@ -11,7 +11,9 @@ var _ = require('lodash'),
    multiparty = require("multiparty"),
    csv = require('csv-streamify'),
    JSONStream = require('JSONStream'),
-   ErrorLog = require('../errorlog/errorlog.model');
+   ErrorLog = require('../errorlog/errorlog.model'),
+   Thing = require('../thing/thing.model'),
+   excludePatterns = [];
 
 var getFormattedTrace = function(stackTrace) {
   var trace = '';
@@ -66,6 +68,17 @@ var storeErrorLogInDb = function (ErrorLog_data) {
     });   
 };
 
+var isExcludedPattern = function(description) {
+  var patterns = _.pluck(excludePatterns, 'pattern');
+  var found = false;
+  for (var i = 0; i < patterns.length && !found; i++) {
+    if (_.contains(description, patterns[i])) {
+      found = true;
+    }
+  }
+  return found;
+}
+
 var parserCsvFile = function(files, res) {
       var dataFile = fs.createReadStream(files.file[0].path);
       var options = {
@@ -74,6 +87,12 @@ var parserCsvFile = function(files, res) {
         newline: '\n\t',
         quote : '\"'
       }
+
+      Thing.find(function (err, things) {
+        if(err) { console.log('error occured while getting exclude patterns'); }
+        excludePatterns = things;
+      });
+
       var csvToJson = csv(options);
 
       var parser = new Transform(options);
@@ -105,12 +124,15 @@ var parserCsvFile = function(files, res) {
             }  
             var count = data[2].replace(/\\r/g, ''); 
             var ErrorLog_data = {description: data[1], stacktrace: data[3], count: count, status: 'NEW', remark: '',system: '', buildVersion: '', buildRelease: ''};
-            storeErrorLogInDb(ErrorLog_data);      
-            this.push(ErrorLog_data);
-            this.row.push(ErrorLog_data);            
+            var patterns = _.pluck(excludePatterns, 'pattern');
+            if(!isExcludedPattern(ErrorLog_data.description)) {
+              storeErrorLogInDb(ErrorLog_data);      
+              this.push(ErrorLog_data);
+              this.row.push(ErrorLog_data); 
+            }           
           }
         }
-        done();
+        done(); 
       };
 
       var jsonToStrings = JSONStream.stringify(false);

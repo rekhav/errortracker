@@ -8,12 +8,12 @@ angular.module('angularAppApp')
     $scope.systems = ['ROB', 'PIF', 'Prisma', 'BaNCS', 'eXimius', 'SIEBEL', 'RT', 'RASS', 'ShareCompany', 'PrintNet'];
     $scope.releases = ['Q4-2014', 'Q4.1-2014', 'Q1-2015', 'Q2-2015', 'Q3-2015', 'Q4-2015'];
     
-    var getAllErrorLogs = function () {
-  		$http.get('/api/errorLogs').success(function(errorLogs) {
-		      $scope.errorLogs = errorLogs;
-		      socket.syncUpdates('errorLog', $scope.errorLogs);
-		});
-  	};
+  //   var getAllErrorLogs = function () {
+  // 		$http.get('/api/errorLogs').success(function(errorLogs) {
+		//       $scope.errorLogs = errorLogs;
+		//       socket.syncUpdates('errorLog', $scope.errorLogs);
+		// });
+  // 	};
 
   	var getNewErrorLogs = function () {
   		$http.get('/api/errorLogs/status/NEW').success(function(errorLogs) {
@@ -91,6 +91,10 @@ angular.module('angularAppApp')
 	    });   
   };
 
+ 	$scope.deleteLog = function(errorLog) {
+      $http.delete('/api/errorLogs/' + errorLog._id);
+      getNewErrorLogs();
+    };
   	
     $scope.onFileSelect = function($files) {
     //$files: an array of files selected, each file has name, size, and type.

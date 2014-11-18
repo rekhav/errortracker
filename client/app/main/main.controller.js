@@ -13,7 +13,7 @@ angular.module('angularAppApp')
       if($scope.newThing === '') {
         return;
       }
-      $http.post('/api/things', { name: $scope.newThing });
+      $http.post('/api/things', { pattern: $scope.newThing });
       $scope.newThing = '';
     };
 

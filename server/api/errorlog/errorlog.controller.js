@@ -48,7 +48,7 @@ exports.show = function(req, res) {
       default :
         console.log('No filter requested so sending nothing');
         return res.json(null);
-        break;
+        
     }      
   
 };
@@ -80,7 +80,7 @@ exports.update = function(req, res) {
 
 // Deletes a errorLog from the DB.
 exports.destroy = function(req, res) {
-  ErrorLog.findById(req.params.name._id, function (err, errorLog) {
+  ErrorLog.findById(req.params.id, function (err, errorLog) {
     if(err) { return handleError(res, err); }
     if(!errorLog) { return res.send(404); }
     errorLog.remove(function(err) {
