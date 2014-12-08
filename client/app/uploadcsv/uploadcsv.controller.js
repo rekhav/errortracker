@@ -69,8 +69,8 @@ angular.module('angularAppApp')
 		return modifiedStatus === 'FIXED';
 	};
 
-	$scope.showInputs = function(modifiedStatus) {
-		return modifiedStatus === 'FIXED';
+	$scope.showInputs = function(modifiedStatus, buildVersion) {
+		return modifiedStatus === 'FIXED' && buildVersion === '';
 	};
 
 	$scope.showSystems = function(modifiedStatus) {
